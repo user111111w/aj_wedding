@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Артём & Юлия</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap" rel="stylesheet"></noscript>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: #111;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    body.overlay-closed {
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .page-wrapper {
+      width: 100%;
+      max-width: 100vw;
+      position: relative;
+      overflow-x: clip;
+      overflow-y: visible;
+      clip-path: inset(0);
+      -webkit-clip-path: inset(0);
+    }
+
+    .screen {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    .player-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      margin: 0;
+      padding: calc(10px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 10px calc(16px + env(safe-area-inset-left));
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(44, 44, 46, 0.92);
+      border-radius: 0 0 14px 14px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .player-btn {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 50%;
+      background: #fff;
+      color: #000;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .player-btn .icon-play {
+      width: 0;
+      height: 0;
+      margin-left: 3px;
+      border-style: solid;
+      border-width: 8px 0 8px 14px;
+      border-color: transparent transparent transparent currentColor;
+    }
+
+    .player-btn .icon-pause {
+      display: none;
+      gap: 4px;
+      align-items: stretch;
+    }
+
+    .player-btn .icon-pause span {
+      width: 4px;
+      height: 16px;
+      background: currentColor;
+      border-radius: 1px;
+    }
+
+    .player-btn.is-playing .icon-play {
+      display: none;
+    }
+
+    .player-btn.is-playing .icon-pause {
+      display: flex;
+    }
+
+    .player-info {
+      flex: 1;
+      min-width: 0;
+      padding-right: 12px;
+    }
+
+    .player-label {
+      font-family: -apple-system, Montserrat, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.6rem;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 2px;
+      text-align: right;
+    }
+
+    .player-title {
+      font-family: -apple-system, Montserrat, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: right;
+    }
+
+    .photo-wrap {
+      position: relative;
+      width: 100%;
+      z-index: 0;
+    }
+
+    .photo-bg {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .photo-bg img {
+      width: 100%;
+      height: auto;
+      display: block;
+      vertical-align: top;
+    }
+
+    .photo-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.5) 100%);
+      pointer-events: none;
+    }
+
+    .names {
+      position: absolute;
+      bottom: 120px;
+      left: 0;
+      right: 0;
+      z-index: 1;
+      text-align: center;
+      padding: 0 0 0 24px;
+    }
+
+    .names-line-left {
+      display: block;
+      font-size: clamp(3.5rem, 15vw, 4.5rem);
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #fff;
+      line-height: 1.0;
+      text-align: left;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body.overlay-closed .names-line-left {
+      animation: nameSlideFromLeft 0.9s ease-out 0.25s both;
+    }
+
+    .names-line-right {
+      display: block;
+      font-size: clamp(3.5rem, 15vw, 4.5rem);
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #fff;
+      line-height: 1.0;
+      text-align: right;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body.overlay-closed .names-line-right {
+      animation: nameSlideFromRight 0.9s ease-out 0.25s both;
+    }
+
+    @keyframes nameSlideFromLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes nameSlideFromRight {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+   .names-amp {
+     display: inline-block;
+     font-size: clamp(3.0rem, 20vw, 4.0rem);
+     font-weight: 300;
+     font-style: italic;
+     font-family: 'Montserrat', sans-serif;
+     letter-spacing: 0.15em;
+     margin: 0.07em 0;
+     opacity: 0.95;
+     line-height: 0.4;
+     color: #888888;
+     transform: translateX(-0.6em) rotate(10deg);
+   }
+
+    .timer-block {
+      position: absolute;
+      bottom: 24px;
+      left: 20px;
+      right: 20px;
+      z-index: 1;
+      padding: 20px 16px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .timer-block .cell {
+      flex: 1;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .timer-block .value {
+      display: block;
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(1.5rem, 6vw, 2rem);
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .timer-block .label {
+      display: block;
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(0.8rem, 3vw, 1rem);
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: lowercase;
+      margin-top: 4px;
+      letter-spacing: 0.02em;
+    }
+
+    .timer-done {
+      position: absolute;
+      bottom: 24px;
+      left: 20px;
+      right: 20px;
+      z-index: 1;
+      padding: 20px 16px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-size: 1rem;
+      text-align: center;
+      color: #fff;
+      display: none;
+    }
+
+    .timer-done.is-visible {
+      display: block;
+    }
+
+    .welcome-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      background: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .welcome-overlay.is-hidden {
+      pointer-events: none;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.5s ease-out;
+    }
+
+    .welcome-overlay .welcome-text {
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 300;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      color: rgba(255, 255, 255, 0.85);
+      text-align: center;
+      margin-top: 24px;
+      letter-spacing: 0.05em;
+    }
+
+    .welcome-overlay .welcome-names {
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 300;
+      font-size: clamp(1.5rem, 6vw, 2rem);
+      color: #fff;
+      text-align: center;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .welcome-overlay .welcome-photo {
+      width: 100%;
+      max-width: 280px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      transition: all 2s ease-out;
+    }
+
+    .welcome-overlay .welcome-photo img {
+      width: 100%;
+      height: auto;
+      display: block;
+      vertical-align: top;
+      transform-origin: center center;
+    }
+
+    .welcome-overlay--opening .welcome-title,
+    .welcome-overlay--opening .welcome-text {
+      opacity: 0;
+      transition: opacity 0.2s ease-out;
+    }
+
+    .welcome-overlay--opening .welcome-photo {
+      position: fixed;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 80%;
+      max-width: none;
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+      z-index: 21;
+    }
+
+    .welcome-overlay--opening .welcome-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      animation: welcomePhotoFullscreen 0.75s ease-out forwards;
+    }
+
+    @keyframes welcomePhotoFullscreen {
+      from {
+        transform: scale(0.28);
+      }
+      to {
+        transform: scale(1);
+      }
+    }
+
+    .welcome-overlay .welcome-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-weight: 400;
+      font-size: clamp(1.1rem, 4.5vw, 1.5rem);
+      color: #fff;
+      text-align: center;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      line-height: 1.4;
+      max-width: 90%;
+    }
+
+    .guests-block {
+      background: #2a2a2a;
+      color: #e8e8e8;
+      padding: 40px 24px 48px;
+    }
+
+    .guests-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.75rem, 6vw, 2.25rem);
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 20px;
+      line-height: 1.3;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .guests-block.is-inview .guests-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .guests-text {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 32px;
+      max-width: 480px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out 0.4s, transform 0.6s ease-out 0.4s;
+    }
+
+    .guests-block.is-inview .guests-text {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .calendar-section {
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 20px;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 16px;
+    }
+
+    .calendar-month {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      color: #fff;
+    }
+
+    .calendar-year {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .calendar-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin-bottom: 8px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.5);
+      text-align: center;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.95rem;
+    }
+
+    .calendar-day {
+      position: relative;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .calendar-day.empty {
+      color: transparent;
+    }
+
+    .calendar-day.highlight {
+      color: #fff;
+      border: none;
+      background-image: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    .calendar-heart {
+      position: absolute;
+      inset: 0;
+      width: 90%;
+      height: 90%;
+      margin: auto;
+      pointer-events: none;
+    }
+
+    .calendar-heart__path {
+      stroke-dasharray: var(--heart-length, 54);
+      stroke-dashoffset: var(--heart-length, 54);
+      transition: stroke-dashoffset 5s ease-out;
+    }
+
+    .calendar-day.highlight.scroll-reveal.is-inview .calendar-heart__path {
+      stroke-dashoffset: 0;
+    }
+
+    .guests-closing {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.85);
+      margin-top: 28px;
+      max-width: 480px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out 0.5s, transform 0.6s ease-out 0.5s;
+    }
+
+    .guests-block.is-inview .guests-closing {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .venue-block {
+      background: #fff;
+      color: #333;
+      padding: 40px 24px 48px;
+    }
+
+    .venue-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      margin-bottom: 20px;
+      line-height: 1.3;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .venue-block.is-inview .venue-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .venue-text {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #333;
+      margin-bottom: 24px;
+      max-width: 480px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out 0.35s, transform 0.6s ease-out 0.35s;
+    }
+
+    .venue-block.is-inview .venue-text {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .venue-text .venue-name {
+      display: block;
+      margin-top: 0.35em;
+    }
+
+    .venue-image-wrap {
+      margin-bottom: 24px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .venue-image-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+      vertical-align: top;
+    }
+
+    .venue-btn {
+      display: block;
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #fff;
+      background: #1a1a1a;
+      border: none;
+      border-radius: 12px;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .venue-btn:hover {
+      background: #252525;
+    }
+
+    .program-block {
+      background: #fff;
+      padding: 40px 24px 48px;
+    }
+
+    .program-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.75rem, 8vw, 2.75rem);
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      text-align: center;
+      margin-bottom: 36px;
+      line-height: 1.25;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .program-block.is-inview .program-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .program-block.is-inview .program-item {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .program-timeline {
+      position: relative;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .program-block {
+      position: relative;
+    }
+
+    .program-timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 15%;
+      height: 89%;
+      width: auto;
+      transform: translateX(-50%);
+      pointer-events: none;
+      overflow: visible;
+      opacity: 0.10;
+    }
+
+    .program-item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 32px;
+      padding: 0 16px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+
+    .program-item:nth-child(1) { transition-delay: 0.25s; }
+    .program-item:nth-child(2) { transition-delay: 0.35s; }
+    .program-item:nth-child(3) { transition-delay: 0.45s; }
+    .program-item:nth-child(4) { transition-delay: 0.55s; }
+    .program-item:nth-child(5) { transition-delay: 0.65s; }
+    .program-item:nth-child(6) { transition-delay: 0.75s; }
+
+    .program-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .program-item--left {
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .program-item--right {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .program-time {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      font-weight: 400;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+
+    .program-event {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      margin-bottom: 6px;
+    }
+
+    .program-desc {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #555;
+      max-width: 220px;
+    }
+
+    .program-item--right .program-desc {
+      margin-left: auto;
+    }
+
+    .fullwidth-image {
+      padding: 0;
+      line-height: 0;
+    }
+
+    .fullwidth-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      vertical-align: top;
+    }
+
+    .dresscode-block {
+      background: #1a1a1a;
+      color: #fff;
+      padding: 48px 24px 56px;
+      text-align: center;
+    }
+
+    .dresscode-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .dresscode-block.is-inview .dresscode-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .dresscode-text {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 400px;
+      margin: 0 auto 32px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out 0.35s, transform 0.6s ease-out 0.35s;
+    }
+
+    .dresscode-block.is-inview .dresscode-text {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .dresscode-palette {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .dresscode-palette .circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-left: -14px;
+    }
+
+    .dresscode-palette .circle:first-child {
+      margin-left: 0;
+    }
+
+    .dresscode-palette .circle--1 { background: #E1AA8F; }
+    .dresscode-palette .circle--2 { background: #F3B8C4; }
+    .dresscode-palette .circle--3 { background: #C87D87; }
+    .dresscode-palette .circle--4 { background: #6B7556; }
+    .dresscode-palette .circle--5 { background: #8C694C; }
+    .dresscode-palette .circle--6 { background: #ADB680; }
+
+    .dresscode-block {
+      overflow: visible;
+    }
+
+    .dresscode-carousel {
+      margin: 0 auto 32px;
+      max-width: 420px;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .dresscode-carousel__viewport {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .dresscode-carousel__slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.6s ease-in-out;
+      z-index: 1;
+      transform: rotate(var(--slide-rotate, 0deg)) translate(0, 0);
+      pointer-events: none;
+    }
+
+    .dresscode-carousel__slide:nth-child(odd) {
+      --slide-rotate: 0deg;
+    }
+
+    .dresscode-carousel__slide:nth-child(even) {
+      --slide-rotate: 0deg;
+    }
+
+    .dresscode-carousel__slide img {
+      width: 66.67%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 12px;
+    }
+
+    .dresscode-carousel__slide.is-active {
+      z-index: 2;
+      transform: rotate(var(--slide-rotate, 0deg)) translate(0, 0);
+    }
+
+    .dresscode-carousel__slide.is-active.exit-left {
+      z-index: 3;
+      transform: rotate(var(--slide-rotate, 0deg)) translate(-100vw, -28vh);
+    }
+
+    .dresscode-carousel__slide.is-active.exit-right {
+      z-index: 3;
+      transform: rotate(var(--slide-rotate, 0deg)) translate(100vw, -28vh);
+    }
+
+    .dresscode-carousel__slide.off-left {
+      transform: rotate(var(--slide-rotate, 0deg)) translate(-100vw, -28vh);
+      transition: none;
+    }
+
+    .dresscode-carousel__slide.off-right {
+      transform: rotate(var(--slide-rotate, 0deg)) translate(100vw, -28vh);
+      transition: none;
+    }
+
+    .dresscode-carousel__slide.reset {
+      transform: rotate(var(--slide-rotate, 0deg)) translate(0, 0) !important;
+      transition: none !important;
+    }
+
+    .details-block {
+      background: #fff;
+      padding: 48px 24px 56px;
+      text-align: center;
+    }
+
+    .details-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #000;
+      margin-bottom: 28px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .details-block.is-inview .details-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .details-text {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #333;
+      max-width: 480px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out 0.35s, transform 0.6s ease-out 0.35s;
+    }
+
+    .details-block.is-inview .details-text {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .form-block {
+      background: #fff;
+      color: #1a1a1a;
+      padding: 48px 24px 56px;
+    }
+
+    .form-block .form-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      text-align: center;
+      margin-bottom: 8px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .form-block.is-inview .form-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .form-block .form-subtitle {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.9rem;
+      color: #555;
+      text-align: center;
+      margin-bottom: 32px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out 0.35s, transform 0.6s ease-out 0.35s;
+    }
+
+    .form-block.is-inview .form-subtitle {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .form-block form {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 28px;
+    }
+
+    .form-label {
+      display: block;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.95rem;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+
+    .form-hint {
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 0;
+      font-family: inherit;
+      font-size: 1rem;
+      color: #1a1a1a;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+      outline: none;
+    }
+
+    .form-input::placeholder {
+      color: #999;
+    }
+
+    .form-options {
+      list-style: none;
+    }
+
+    .form-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+
+    .form-option input {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      accent-color: #1a1a1a;
+      cursor: pointer;
+    }
+
+    .form-option span {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.95rem;
+      color: #1a1a1a;
+    }
+
+    .form-submit {
+      display: block;
+      width: 100%;
+      margin-top: 36px;
+      padding: 14px 24px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #fff;
+      background: #1a1a1a;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .form-submit:hover {
+      background: #333;
+    }
+
+    .contacts-block {
+      background: #fff;
+      padding: 48px 24px 56px;
+      color: #1a1a1a;
+    }
+
+    .contacts-section {
+      max-width: 400px;
+      margin: 0 auto 48px;
+      text-align: center;
+    }
+
+    .contacts-section:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .contacts-section-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.35rem, 4.5vw, 1.75rem);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #000;
+      margin-bottom: 12px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .contacts-block.is-inview .contacts-section-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .contacts-section-text {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #333;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out 0.35s, transform 0.6s ease-out 0.35s;
+    }
+
+    .contacts-block.is-inview .contacts-section-text {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .contacts-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 12px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .contacts-btn--filled {
+      background: #1a1a1a;
+      color: #fff;
+      border: none;
+    }
+
+    .contacts-btn--filled:hover {
+      background: #333;
+    }
+
+    .contacts-btn--outline {
+      background: transparent;
+      color: #1a1a1a;
+      border: 2px solid #1a1a1a;
+    }
+
+    .contacts-btn--outline:hover {
+      background: #f5f5f5;
+    }
+
+    .contacts-btn + .contacts-btn {
+      margin-top: 12px;
+    }
+
+    .farewell-block {
+      background: #fff;
+      padding: 56px 24px 64px;
+      text-align: center;
+    }
+
+    .farewell-block .farewell-text {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.75rem, 8vw, 2.5rem);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .farewell-block.is-inview .farewell-text {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .scroll-reveal.is-inview {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="welcome-overlay" id="welcome-overlay">
+    <div class="welcome-photo">
+      <img src="images/test.jpg" alt="Артём и Юлия">
+    </div>
+    <span class="welcome-title">Приглашение на свадьбу Артёма и Юлии</span>
+    <span class="welcome-text">Нажмите, чтобы открыть приглашение</span>
+  </div>
+
+  <audio id="wedding-audio" src="music/Vance Joy - I 'm with you.mp3" preload="auto" loop></audio>
+
+  <div class="page-wrapper">
+  <div class="screen">
+    <div class="photo-wrap scroll-reveal is-inview">
+      <div class="player-bar">
+        <button type="button" class="player-btn" id="player-btn" aria-label="Включить музыку">
+          <span class="icon-play" aria-hidden="true"></span>
+          <span class="icon-pause" aria-hidden="true">
+            <span></span><span></span>
+          </span>
+        </button>
+        <div class="player-info">
+          <div class="player-label">сейчас играет:</div>
+          <div class="player-title">Vance Joy — I'm with you</div>
+        </div>
+      </div>
+      <div class="photo-bg">
+        <img src="images/test.jpg" alt="Артём и Юлия">
+      </div>
+
+      <header class="names">
+      <span class="names-line-left">Артём</span>
+      <span class="names-amp">&</span>
+      <span class="names-line-right">Юлия</span>
+      </header>
+
+      <div id="timer" class="timer-block" aria-live="polite">
+      <div class="cell">
+        <span class="value" id="days">0</span>
+        <span class="label">дней</span>
+      </div>
+      <div class="cell">
+        <span class="value" id="hours">0</span>
+        <span class="label">часов</span>
+      </div>
+      <div class="cell">
+        <span class="value" id="minutes">0</span>
+        <span class="label">минут</span>
+      </div>
+      <div class="cell">
+        <span class="value" id="seconds">0</span>
+        <span class="label">секунд</span>
+      </div>
+      </div>
+
+      <div id="timer-done" class="timer-done">
+        До встречи на празднике!
+      </div>
+    </div>
+
+    <section class="guests-block scroll-reveal">
+      <h2 class="guests-title">Дорогие гости</h2>
+      <p class="guests-text">Приглашаем отпраздновать самое важное событие в нашей жизни – день нашей свадьбы!</p>
+      <div class="calendar-section">
+        <div class="calendar-header">
+          <span class="calendar-month">Июль</span>
+          <span class="calendar-year">2026</span>
+        </div>
+        <div class="calendar-weekdays">
+          <span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span>
+        </div>
+        <div class="calendar-grid" id="calendar-july-2026">
+          <div class="calendar-day empty"></div>
+          <div class="calendar-day empty"></div>
+          <div class="calendar-day highlight scroll-reveal" id="calendar-highlight-day">1<svg class="calendar-heart" viewBox="0 0 24 24" aria-hidden="true"><path class="calendar-heart__path" fill="none" stroke="rgba(255,255,255,0.95)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+          <div class="calendar-day">2</div>
+          <div class="calendar-day">3</div>
+          <div class="calendar-day">4</div>
+          <div class="calendar-day">5</div>
+          <div class="calendar-day">6</div>
+          <div class="calendar-day">7</div>
+          <div class="calendar-day">8</div>
+          <div class="calendar-day">9</div>
+          <div class="calendar-day">10</div>
+          <div class="calendar-day">11</div>
+          <div class="calendar-day">12</div>
+          <div class="calendar-day">13</div>
+          <div class="calendar-day">14</div>
+          <div class="calendar-day">15</div>
+          <div class="calendar-day">16</div>
+          <div class="calendar-day">17</div>
+          <div class="calendar-day">18</div>
+          <div class="calendar-day">19</div>
+          <div class="calendar-day">20</div>
+          <div class="calendar-day">21</div>
+          <div class="calendar-day">22</div>
+          <div class="calendar-day">23</div>
+          <div class="calendar-day">24</div>
+          <div class="calendar-day">25</div>
+          <div class="calendar-day">26</div>
+          <div class="calendar-day">27</div>
+          <div class="calendar-day">28</div>
+          <div class="calendar-day">29</div>
+          <div class="calendar-day">30</div>
+          <div class="calendar-day">31</div>
+        </div>
+      </div>
+      <p class="guests-closing">Мы будем рады видеть вас в кругу наших гостей!</p>
+    </section>
+
+    <section class="venue-block scroll-reveal">
+      <h2 class="venue-title">Место проведения</h2>
+      <p class="venue-text">
+        Роспись пройдёт по адресу: г. Пушкин, Садовая ул., 22
+        <span class="venue-name">«Дворец бракосочетания №3»</span>
+      </p>
+      <div class="venue-image-wrap">
+        <img src="images/test.jpg" alt="Дворец бракосочетания №3" loading="lazy">
+      </div>
+      <a href="https://yandex.com/maps/10884/pushkin/?ll=30.411323%2C59.713129&mode=routes&rtext=~59.713152%2C30.410913&rtt=auto&ruri=~&z=17.77" class="venue-btn" target="_blank" rel="noopener noreferrer">Построить маршрут</a>
+    </section>
+
+    <section class="venue-block scroll-reveal">
+      <p class="venue-text">Банкетный зал</p>
+      <p class="venue-text">
+        Ресторан «Атриум Холл», г. Санкт-Петербург, Английская наб., 70
+      </p>
+      <div class="venue-image-wrap">
+        <img src="images/test.jpg" alt="Ресторан Атриум Холл" loading="lazy">
+      </div>
+      <a href="https://yandex.com/maps/2/saint-petersburg/?ll=30.284220%2C59.931513&mode=routes&rtext=~59.931513%2C30.284220&rtt=auto&ruri=~ymapsbm1%3A%2F%2Forg%3Foid%3D1655232164&z=14" class="venue-btn" target="_blank" rel="noopener noreferrer">Построить маршрут</a>
+    </section>
+
+    <section class="program-block scroll-reveal">
+      <svg class="program-timeline-line" viewBox="0 0 3730 6350" preserveAspectRatio="none" aria-hidden="true">
+          <g transform="translate(0,6350) scale(1,-1)" fill="#000000" stroke="none">
+            <path d="M2583 6175 c155 -235 -148 -669 -818 -1172 -252 -190 -565 -388 -796 -504 l-97 -48 -239 1 c-263 2 -335 -7 -373 -47 -18 -19 -21 -30 -16 -62 12 -65 16 -68 108 -67 112 1 321 64 478 144 36 19 46 19 296 5 239 -13 686 -59 1179 -121 704 -89 991 -161 1056 -267 36 -61 15 -126 -71 -221 -166 -181 -795 -626 -1365 -966 -258 -153 -250 -185 70 -293 195 -67 595 -218 728 -277 184 -80 255 -143 326 -287 86 -174 76 -349 -30 -530 -53 -90 -217 -248 -343 -331 -214 -141 -473 -257 -753 -338 -205 -59 -201 -59 -163 17 61 120 24 159 -91 98 -67 -36 -194 -148 -204 -180 -12 -38 7 -42 115 -24 56 9 104 14 107 11 3 -3 -27 -50 -66 -104 -84 -118 -105 -161 -92 -195 9 -23 80 -81 131 -107 35 -17 16 -1 -53 45 -99 66 -97 86 30 266 55 78 85 111 103 115 14 3 95 25 180 49 405 113 756 299 970 515 149 150 216 275 227 425 13 174 -93 391 -237 484 -102 66 -498 227 -868 352 -334 113 -338 130 -67 291 555 330 1176 772 1349 959 95 102 115 167 73 230 -76 113 -348 183 -1062 273 -442 56 -1009 115 -1165 120 -91 4 -182 9 -204 12 l-38 6 118 62 c437 229 909 570 1230 891 261 260 384 460 386 626 1 70 -24 142 -59 171 -9 7 -4 -5 10 -27z m-1803 -1735 c77 -1 73 -4 -69 -62 -131 -53 -252 -87 -337 -95 -88 -7 -110 3 -119 57 -8 46 3 66 45 82 42 16 188 27 305 22 61 -2 139 -4 175 -4z m1000 -3540 c0 -17 -13 -57 -30 -89 -16 -32 -26 -62 -22 -66 4 -4 3 -6 -3 -5 -21 5 -36 0 -30 -10 3 -5 0 -7 -8 -4 -8 3 -54 -2 -103 -10 -49 -9 -95 -16 -101 -16 -30 0 -8 39 55 100 73 70 171 129 215 130 24 0 27 -4 27 -30z"/>
+          </g>
+      </svg>
+      <h2 class="program-title">Программа<br>дня</h2>
+      <div class="program-timeline">
+        <div class="program-item program-item--right">
+          <span class="program-time">14:30</span>
+          <span class="program-event">Трансфер м. Московская</span>
+          <p class="program-desc">Просим вас прибыть немного заранее, чтобы не пропустить главное</p>
+        </div>
+        <div class="program-item program-item--left">
+          <span class="program-time">16:00</span>
+          <span class="program-event">Свадебная церемония</span>
+          <p class="program-desc">Самый трогательный момент</p>
+        </div>
+        <div class="program-item program-item--right">
+          <span class="program-time">18:30</span>
+          <span class="program-event">Welcome</span>
+          <p class="program-desc">Вас ждут лёгкие закуски и напитки</p>
+        </div>
+        <div class="program-item program-item--left">
+          <span class="program-time">19:00</span>
+          <span class="program-event">Свадебный банкет</span>
+          <p class="program-desc">Время вкусно поесть, вспомнить смешные истории и сказать добрые слова</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="fullwidth-image scroll-reveal">
+      <img src="images/test.jpg" alt="" loading="lazy">
+    </section>
+
+    <section class="dresscode-block scroll-reveal">
+      <h2 class="dresscode-title">Дресс-код</h2>
+      <p class="dresscode-text">Будем очень благодарны, если вы поддержите стиль и цвет нашей свадьбы в своих нарядах</p>
+      <div class="dresscode-palette">
+        <span class="circle circle--1" aria-hidden="true"></span>
+        <span class="circle circle--2" aria-hidden="true"></span>
+        <span class="circle circle--3" aria-hidden="true"></span>
+        <span class="circle circle--4" aria-hidden="true"></span>
+        <span class="circle circle--5" aria-hidden="true"></span>
+        <span class="circle circle--6" aria-hidden="true"></span>
+      </div>
+      <div class="dresscode-carousel" id="dresscode-carousel" aria-roledescription="carousel" aria-label="Примеры образов">
+        <div class="dresscode-carousel__viewport" id="dresscode-viewport"></div>
+      </div>
+    </section>
+
+    <section class="details-block scroll-reveal">
+      <h2 class="details-title">Детали</h2>
+      <p class="details-text">Пожалуйста, не дарите нам цветы – нам будет грустно оставить их после праздника. Если вы хотите порадовать невесту, оформите для неё цветочную подписку – пусть свежие букеты напоминают о тёплом дне ещё долго после свадьбы.</p>
+    </section>
+
+    <section class="form-block scroll-reveal">
+      <h2 class="form-title">Анкета</h2>
+      <p class="form-subtitle">Подтвердите своё присутствие до 1 июня</p>
+      <iframe name="guest-form-response" title="Ответ формы" style="display:none; width:0; height:0; border:0;"></iframe>
+      <form id="guest-form" method="POST">
+        <div class="form-group">
+          <label class="form-label" for="guest-name">Ваше имя и фамилия</label>
+          <p class="form-hint">Каждый гость заполняет за себя</p>
+          <input type="text" id="guest-name" name="name" class="form-input" placeholder="Иван Иванов" required>
+        </div>
+        <div class="form-group">
+          <span class="form-label">Планируете ли вы присутствовать?</span>
+          <ul class="form-options">
+            <li class="form-option">
+              <input type="radio" id="attend-yes" name="attend" value="yes" required>
+              <span>Да, с радостью приду</span>
+            </li>
+            <li class="form-option">
+              <input type="radio" id="attend-no" name="attend" value="no">
+              <span>Нет, к сожалению, не получится</span>
+            </li>
+            <li class="form-option">
+              <input type="radio" id="attend-maybe" name="attend" value="maybe">
+              <span>Пока не уверен(а), сообщу</span>
+            </li>
+          </ul>
+        </div>
+        <div class="form-group">
+          <span class="form-label">Предпочтения по алкоголю</span>
+          <p class="form-hint">Можно выбрать несколько вариантов</p>
+          <ul class="form-options">
+            <li class="form-option">
+              <input type="checkbox" id="alc-champagne" name="alcohol" value="champagne">
+              <span>Шампанское</span>
+            </li>
+            <li class="form-option">
+              <input type="checkbox" id="alc-wine" name="alcohol" value="wine">
+              <span>Белое вино</span>
+            </li>
+            <li class="form-option">
+              <input type="checkbox" id="alc-cognac" name="alcohol" value="cognac">
+              <span>Коньяк</span>
+            </li>
+            <li class="form-option">
+              <input type="checkbox" id="alc-vodka" name="alcohol" value="vodka">
+              <span>Водка</span>
+            </li>
+            <li class="form-option">
+              <input type="checkbox" id="alc-juice" name="alcohol" value="juice">
+              <span>Сок</span>
+            </li>
+            <li class="form-option">
+              <input type="checkbox" id="alc-none" name="alcohol" value="none">
+              <span>Не пью алкоголь</span>
+            </li>
+          </ul>
+        </div>
+        <button type="submit" class="form-submit">Отправить</button>
+      </form>
+    </section>
+
+    <section class="contacts-block scroll-reveal">
+      <div class="contacts-section">
+        <h2 class="contacts-section-title">Общий чат</h2>
+        <p class="contacts-section-text">Вступайте в наш чат в Телеграм. Там мы будем делиться впечатлениями, эмоциями, фото и видео.</p>
+        <a href="https://t.me/artyomnaz" class="contacts-btn contacts-btn--filled" target="_blank" rel="noopener noreferrer">Вступить в чат</a>
+      </div>
+      <div class="contacts-section">
+        <h2 class="contacts-section-title">Контакты</h2>
+        <p class="contacts-section-text">По любым вопросам торжества обращайтесь к нашему координатору – Ксения</p>
+        <a href="https://t.me/artyomnaz" class="contacts-btn contacts-btn--filled" target="_blank" rel="noopener noreferrer">Написать в Телеграм</a>
+        <a href="tel:+79822768691" class="contacts-btn contacts-btn--outline">Позвонить</a>
+      </div>
+    </section>
+
+    <section class="farewell-block scroll-reveal">
+      <p class="farewell-text">До скорой встречи!</p>
+    </section>
+  </div>
+  </div>
+
+  <script>
+    try {
+    const weddingDate = new Date(2026, 6, 1, 16, 0);
+
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+    const timerEl = document.getElementById('timer');
+    const timerDoneEl = document.getElementById('timer-done');
+
+    const timerReady = daysEl && hoursEl && minutesEl && secondsEl && timerEl && timerDoneEl;
+
+    function pad(n) {
+      return String(n).padStart(2, '0');
+    }
+
+    function updateTimer() {
+      if (!timerReady) return;
+      const now = new Date();
+      const diff = weddingDate - now;
+
+      if (diff <= 0) {
+        timerEl.style.display = 'none';
+        timerDoneEl.classList.add('is-visible');
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      daysEl.textContent = days;
+      hoursEl.textContent = pad(hours);
+      minutesEl.textContent = pad(minutes);
+      secondsEl.textContent = pad(seconds);
+    }
+
+    if (timerReady) {
+      updateTimer();
+      setInterval(updateTimer, 1000);
+    }
+
+    (function () {
+      const audio = document.getElementById('wedding-audio');
+      const btn = document.getElementById('player-btn');
+      const overlay = document.getElementById('welcome-overlay');
+      if (!audio || !btn) return;
+
+      function startMusic() {
+        audio.play().then(function () {
+          btn.classList.add('is-playing');
+          btn.setAttribute('aria-label', 'Пауза');
+        }).catch(function () {});
+      }
+
+      function hideOverlay() {
+        if (!overlay) return;
+        overlay.classList.add('welcome-overlay--opening');
+        startMusic();
+        setTimeout(function () {
+          document.body.classList.add('overlay-closed');
+          overlay.classList.add('is-hidden');
+          window.scrollTo(0, 0);
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+          document.body.dispatchEvent(new CustomEvent('wedding-overlay-closed'));
+        }, 750);
+        setTimeout(function () {
+          overlay.style.display = 'none';
+        }, 1300);
+      }
+
+      if (overlay) {
+        overlay.addEventListener('click', hideOverlay);
+      }
+
+      btn.addEventListener('click', function () {
+        if (audio.paused) {
+          audio.play().catch(function () {});
+          btn.classList.add('is-playing');
+          btn.setAttribute('aria-label', 'Пауза');
+        } else {
+          audio.pause();
+          btn.classList.remove('is-playing');
+          btn.setAttribute('aria-label', 'Включить музыку');
+        }
+      });
+      audio.addEventListener('play', function () {
+        btn.classList.add('is-playing');
+      });
+      audio.addEventListener('pause', function () {
+        btn.classList.remove('is-playing');
+      });
+    })();
+
+    (function () {
+      // Вставьте сюда URL веб-приложения из Google Apps Script (см. инструкцию в google-sheet-apps-script.js)
+      var GOOGLE_FORM_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwb_AJLvI5uFWiKOGDT2QU6wFiSzlfojRhMplH5llYu3ghWWwt3ebaBXiTt9i0veH9k/exec';
+
+      var form = document.getElementById('guest-form');
+      if (!form) return;
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        if (GOOGLE_FORM_SCRIPT_URL) {
+          var name = (form.querySelector('[name="name"]') || {}).value || '';
+          var attend = (form.querySelector('[name="attend"]:checked') || {}).value || '';
+          var alcoholChecks = form.querySelectorAll('[name="alcohol"]:checked');
+          var alcohol = Array.prototype.map.call(alcoholChecks, function (c) { return c.value; }).join(',');
+
+          var submitForm = document.createElement('form');
+          submitForm.method = 'POST';
+          submitForm.action = GOOGLE_FORM_SCRIPT_URL;
+          submitForm.target = 'guest-form-response';
+          submitForm.style.display = 'none';
+          ['name', 'attend', 'alcohol'].forEach(function (key) {
+            var input = document.createElement('input');
+            input.name = key;
+            input.value = key === 'name' ? name : key === 'attend' ? attend : alcohol;
+            submitForm.appendChild(input);
+          });
+          document.body.appendChild(submitForm);
+          submitForm.submit();
+          document.body.removeChild(submitForm);
+        }
+
+        alert('Спасибо! Ваша анкета отправлена.');
+        form.reset();
+      });
+    })();
+
+    (function () {
+      // Добавьте имя файла сюда — слайд появится автоматически
+      var photos = [
+
+      ];
+
+      var viewport = document.getElementById('dresscode-viewport');
+      if (!viewport || !photos.length) return;
+
+      photos.forEach(function (file, i) {
+        var slide = document.createElement('div');
+        slide.className = 'dresscode-carousel__slide' + (i === 0 ? ' is-active' : '');
+        slide.setAttribute('data-index', i);
+        slide.setAttribute('aria-hidden', i === 0 ? 'false' : 'true');
+        var img = document.createElement('img');
+        img.src = 'images/dresscode/' + file;
+        img.alt = '';
+        img.loading = 'lazy';
+        slide.appendChild(img);
+        viewport.appendChild(slide);
+      });
+
+      var slides = viewport.querySelectorAll('.dresscode-carousel__slide');
+      var count = slides.length;
+      if (count < 2) return;
+      var current = 0;
+      var direction = 'left';
+      var interval = 4500;
+
+      function goNext() {
+        var next = (current + 1) % count;
+        var currentEl = slides[current];
+        var nextEl = slides[next];
+        currentEl.setAttribute('aria-hidden', 'true');
+        nextEl.setAttribute('aria-hidden', 'false');
+        nextEl.classList.remove('off-left', 'off-right');
+        nextEl.classList.add('reset');
+        if (direction === 'left') {
+          currentEl.classList.add('exit-left');
+        } else {
+          currentEl.classList.add('exit-right');
+        }
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            nextEl.classList.add('is-active');
+          });
+        });
+        setTimeout(function () {
+          currentEl.classList.remove('is-active', 'exit-left', 'exit-right');
+          if (direction === 'left') {
+            currentEl.classList.add('off-left');
+          } else {
+            currentEl.classList.add('off-right');
+          }
+          nextEl.classList.remove('reset');
+          current = next;
+          direction = direction === 'left' ? 'right' : 'left';
+        }, 600);
+      }
+
+      setInterval(goNext, interval);
+    })();
+
+    // TODO: открытие с десктопа - QR код
+    (function () {
+      var reveals = document.querySelectorAll('.scroll-reveal');
+      if (!reveals.length) return;
+      var started = false;
+      function startScrollReveal() {
+        if (started) return;
+        started = true;
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-inview');
+            }
+          });
+        }, { rootMargin: '0px 0px -40px 0px', threshold: 0.05 });
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            reveals.forEach(function (el) {
+              observer.observe(el);
+            });
+          });
+        });
+      }
+      document.body.addEventListener('wedding-overlay-closed', startScrollReveal);
+      if (document.body.classList.contains('overlay-closed')) {
+        startScrollReveal();
+      }
+    })();
+
+    (function () {
+      var path = document.querySelector('.calendar-heart__path');
+      if (path) {
+        var el = path.closest('.calendar-heart') || path;
+        el.style.setProperty('--heart-length', path.getTotalLength());
+      }
+    })();
+    } catch (e) {}
+  </script>
+</body>
+</html>
