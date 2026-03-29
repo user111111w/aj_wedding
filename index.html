@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>Артём & Юлия</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23a65c6c' d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23a65c6c' d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -174,7 +176,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.5) 100%);
+      background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 20%, transparent 40%, rgba(0,0,0,0.5) 100%);
       pointer-events: none;
     }
 
@@ -252,7 +254,7 @@
      margin: 0.07em 0;
      opacity: 0.95;
      line-height: 0.4;
-     color: #888888;
+     color: rgb(57, 57, 58);
      transform: translateX(-0.6em) rotate(10deg);
    }
 
@@ -417,13 +419,12 @@
     }
 
     .welcome-overlay .welcome-title {
-      font-family: Georgia, 'Times New Roman', serif;
+      font-family: Cambria, Georgia, 'Times New Roman', serif;
       font-weight: 400;
-      font-size: clamp(1.1rem, 4.5vw, 1.5rem);
+      font-size: clamp(1.6rem, 4.5vw, 2.0rem);
       color: #fff;
       text-align: center;
       letter-spacing: 0.15em;
-      text-transform: uppercase;
       line-height: 1.4;
       max-width: 90%;
     }
@@ -435,7 +436,7 @@
     }
 
     .guests-title {
-      font-family: Georgia, 'Times New Roman', serif;
+      font-family: Cambria, Georgia, 'Times New Roman', serif;
       font-size: clamp(1.75rem, 6vw, 2.25rem);
       font-weight: 400;
       letter-spacing: 0.15em;
@@ -455,7 +456,7 @@
 
     .guests-text {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 0.95rem;
+      font-size: 1.0rem;
       line-height: 1.5;
       color: rgba(255, 255, 255, 0.85);
       margin-bottom: 32px;
@@ -483,7 +484,7 @@
     }
 
     .calendar-month {
-      font-family: Georgia, 'Times New Roman', serif;
+      font-family: Cambria, Georgia, 'Times New Roman', serif;
       font-size: 1.5rem;
       font-weight: 400;
       letter-spacing: 0.1em;
@@ -491,7 +492,7 @@
     }
 
     .calendar-year {
-      font-family: Georgia, 'Times New Roman', serif;
+      font-family: Cambria, Georgia, 'Times New Roman', serif;
       font-size: 1.25rem;
       font-weight: 400;
       color: rgba(255, 255, 255, 0.8);
@@ -558,7 +559,7 @@
 
     .guests-closing {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 0.95rem;
+      font-size: 1.0rem;
       line-height: 1.5;
       color: rgba(255, 255, 255, 0.85);
       margin-top: 28px;
@@ -579,8 +580,16 @@
       padding: 40px 24px 48px;
     }
 
+    .venue-block:has(+ .venue-block) {
+      padding-bottom: 24px;
+    }
+
+    .venue-block + .venue-block {
+      padding-top: 16px;
+    }
+
     .venue-title {
-      font-family: Georgia, 'Times New Roman', serif;
+      font-family: Cambria, Georgia, 'Times New Roman', serif;
       font-size: clamp(1.5rem, 5vw, 2rem);
       font-weight: 400;
       letter-spacing: 0.15em;
@@ -600,12 +609,12 @@
 
     .venue-text {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 0.95rem;
+      font-size: 1.0rem;
       line-height: 1.6;
       color: #333;
       margin-bottom: 24px;
       max-width: 480px;
-      text-align: center;
+      text-align: left;
       opacity: 0;
       transform: translateY(20px);
       transition: opacity 0.6s ease-out 0.35s, transform 0.6s ease-out 0.35s;
@@ -663,7 +672,7 @@
     }
 
     .program-title {
-      font-family: Georgia, 'Times New Roman', serif;
+      font-family: Cambria, Georgia, 'Times New Roman', serif;
       font-size: clamp(1.75rem, 8vw, 2.75rem);
       font-weight: 400;
       letter-spacing: 0.15em;
@@ -742,7 +751,7 @@
     }
 
     .program-time {
-      font-family: Georgia, 'Times New Roman', serif;
+      font-family: Cambria, Georgia, 'Times New Roman', serif;
       font-size: clamp(1.5rem, 5vw, 2rem);
       font-weight: 400;
       color: #1a1a1a;
@@ -750,7 +759,7 @@
     }
 
     .program-event {
-      font-family: Georgia, 'Times New Roman', serif;
+      font-family: Cambria, Georgia, 'Times New Roman', serif;
       font-size: 0.85rem;
       font-weight: 400;
       letter-spacing: 0.08em;
@@ -784,20 +793,21 @@
     }
 
     .dresscode-block {
-      background: #1a1a1a;
-      color: #fff;
+      background: #fff;
+      color: #1a1a1a;
       padding: 48px 24px 56px;
       text-align: center;
     }
 
     .dresscode-title {
-      font-family: Georgia, 'Times New Roman', serif;
-      font-size: clamp(1.5rem, 5vw, 2rem);
+      font-family: Cambria, Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.75rem, 8vw, 2.75rem);
       font-weight: 400;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: #fff;
-      margin-bottom: 20px;
+      color: #1a1a1a;
+      text-align: center;
+      margin-bottom: 36px;
       opacity: 0;
       transform: translateY(24px);
       transition: opacity 0.6s ease-out, transform 0.6s ease-out;
@@ -810,9 +820,9 @@
 
     .dresscode-text {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 0.95rem;
+      font-size: 1.0rem;
       line-height: 1.5;
-      color: rgba(255, 255, 255, 0.9);
+      color: #1a1a1a;
       max-width: 400px;
       margin: 0 auto 32px;
       opacity: 0;
@@ -859,7 +869,7 @@
 
     .dresscode-carousel {
       margin: 0 auto 32px;
-      max-width: 420px;
+      max-width: 600px;
       overflow: visible;
       pointer-events: none;
     }
@@ -867,7 +877,7 @@
     .dresscode-carousel__viewport {
       position: relative;
       width: 100%;
-      aspect-ratio: 4/3;
+      aspect-ratio: 5/3;
       overflow: visible;
       pointer-events: none;
     }
@@ -893,9 +903,10 @@
     }
 
     .dresscode-carousel__slide img {
-      width: 66.67%;
+      width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      object-position: center;
       display: block;
       border-radius: 12px;
     }
@@ -937,8 +948,8 @@
     }
 
     .details-title {
-      font-family: Georgia, 'Times New Roman', serif;
-      font-size: clamp(1.5rem, 5vw, 2rem);
+      font-family: Cambria, Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.75rem, 8vw, 2.75rem);
       font-weight: 400;
       letter-spacing: 0.12em;
       text-transform: uppercase;
@@ -952,6 +963,20 @@
     .details-block.is-inview .details-title {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    .details-subtitle {
+      font-family: Cambria, Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.15rem, 3.8vw, 1.4rem);
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      margin-bottom: 16px;
+    }
+
+    .details-subtitle:not(:first-of-type) {
+      margin-top: 28px;
     }
 
     .details-text {
@@ -977,9 +1002,17 @@
       padding: 48px 24px 56px;
     }
 
+    .form-block:has(+ .contacts-block) {
+      padding-bottom: 24px;
+    }
+
+    .form-block + .contacts-block {
+      padding-top: 20px;
+    }
+
     .form-block .form-title {
-      font-family: Georgia, 'Times New Roman', serif;
-      font-size: clamp(1.5rem, 5vw, 2rem);
+      font-family: Cambria, Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.75rem, 8vw, 2.75rem);
       font-weight: 400;
       letter-spacing: 0.12em;
       text-transform: uppercase;
@@ -1031,6 +1064,7 @@
 
     .form-hint {
       font-size: 0.8rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       color: #666;
       margin-bottom: 8px;
     }
@@ -1038,7 +1072,7 @@
     .form-input {
       width: 100%;
       padding: 10px 0;
-      font-family: inherit;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 1rem;
       color: #1a1a1a;
       background: transparent;
@@ -1049,6 +1083,10 @@
 
     .form-input::placeholder {
       color: #999;
+    }
+
+    .form-allergies-detail {
+      margin-top: 16px;
     }
 
     .form-options {
@@ -1101,6 +1139,14 @@
       background: #fff;
       padding: 48px 24px 56px;
       color: #1a1a1a;
+    }
+
+    .contacts-block:has(+ .farewell-block) {
+      padding-bottom: 24px;
+    }
+
+    .contacts-block + .farewell-block {
+      padding-top: 20px;
     }
 
     .contacts-section {
@@ -1191,6 +1237,22 @@
       text-align: center;
     }
 
+    .farewell-heart {
+      display: block;
+      width: clamp(36px, 9vw, 52px);
+      height: auto;
+      margin: 14px auto 0;
+      color: #1a1a1a;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .farewell-block.is-inview .farewell-heart {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     .farewell-block .farewell-text {
       font-family: Georgia, 'Times New Roman', serif;
       font-size: clamp(1.75rem, 8vw, 2.5rem);
@@ -1218,14 +1280,67 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    .desktop-qr-gate {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .desktop-qr-gate {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        min-height: 100vh;
+        min-height: 100dvh;
+        padding: 40px 24px;
+        box-sizing: border-box;
+        background: #fff;
+        color: #1a1a1a;
+        text-align: center;
+      }
+
+      .desktop-qr-gate__img {
+        width: min(260px, 70vw);
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .desktop-qr-gate__text {
+        max-width: 440px;
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: clamp(1rem, 2.2vw, 1.15rem);
+        line-height: 1.55;
+        color: #333;
+      }
+
+      .welcome-overlay,
+      #wedding-audio,
+      .page-wrapper {
+        display: none !important;
+      }
+
+      body {
+        overflow: auto;
+        background: #fff;
+      }
+    }
   </style>
 </head>
 <body>
+  <div class="desktop-qr-gate" id="desktop-qr-gate">
+    <img class="desktop-qr-gate__img" src="images/qr-code.png" width="260" height="260" alt="QR-код: откройте приглашение на телефоне" loading="eager" decoding="async">
+    <p class="desktop-qr-gate__text">Данное пригласительное доступно только с телефона, отсканируйте QR-код, чтобы открыть</p>
+  </div>
+
   <div class="welcome-overlay" id="welcome-overlay">
     <div class="welcome-photo">
-      <img src="images/test.jpg" alt="Артём и Юлия">
+      <img src="images/welcome.png" alt="Артём и Юлия">
     </div>
-    <span class="welcome-title">Приглашение на свадьбу Артёма и Юлии</span>
+    <span class="welcome-title">Приглашение на свадьбу<br>Артёма и Юлии</span>
     <span class="welcome-text">Нажмите, чтобы открыть приглашение</span>
   </div>
 
@@ -1247,7 +1362,7 @@
         </div>
       </div>
       <div class="photo-bg">
-        <img src="images/test.jpg" alt="Артём и Юлия">
+        <img src="images/we.png" alt="Артём и Юлия">
       </div>
 
       <header class="names">
@@ -1281,7 +1396,7 @@
     </div>
 
     <section class="guests-block scroll-reveal">
-      <h2 class="guests-title">Дорогие гости</h2>
+      <h2 class="guests-title">Дорогие гости!</h2>
       <p class="guests-text">Приглашаем отпраздновать самое важное событие в нашей жизни – день нашей свадьбы!</p>
       <div class="calendar-section">
         <div class="calendar-header">
@@ -1331,24 +1446,27 @@
     </section>
 
     <section class="venue-block scroll-reveal">
-      <h2 class="venue-title">Место проведения</h2>
+      <h2 class="venue-title">Регистрация брака</h2>
       <p class="venue-text">
-        Роспись пройдёт по адресу: г. Пушкин, Садовая ул., 22
-        <span class="venue-name">«Дворец бракосочетания №3»</span>
+        <!-- Роспись пройдёт по адресу:<br> -->
+        «Дворец бракосочетания №3»,<br>
+        г. Пушкин, Садовая ул., 22
       </p>
       <div class="venue-image-wrap">
-        <img src="images/test.jpg" alt="Дворец бракосочетания №3" loading="lazy">
+        <img src="images/zags1.jpg" alt="Дворец бракосочетания №3" loading="lazy">
       </div>
       <a href="https://yandex.com/maps/10884/pushkin/?ll=30.411323%2C59.713129&mode=routes&rtext=~59.713152%2C30.410913&rtt=auto&ruri=~&z=17.77" class="venue-btn" target="_blank" rel="noopener noreferrer">Построить маршрут</a>
     </section>
 
     <section class="venue-block scroll-reveal">
-      <p class="venue-text">Банкетный зал</p>
+      <!-- <p class="venue-text">Банкетный зал</p> -->
+      <h2 class="venue-title">Банкетный зал</h2>
       <p class="venue-text">
-        Ресторан «Атриум Холл», г. Санкт-Петербург, Английская наб., 70
+        Ресторан «Атриум Холл»,<br>
+        г. Санкт-Петербург, Английская наб., 70
       </p>
       <div class="venue-image-wrap">
-        <img src="images/test.jpg" alt="Ресторан Атриум Холл" loading="lazy">
+        <img src="images/restaurant.jpg" alt="Ресторан Атриум Холл" loading="lazy">
       </div>
       <a href="https://yandex.com/maps/2/saint-petersburg/?ll=30.284220%2C59.931513&mode=routes&rtext=~59.931513%2C30.284220&rtt=auto&ruri=~ymapsbm1%3A%2F%2Forg%3Foid%3D1655232164&z=14" class="venue-btn" target="_blank" rel="noopener noreferrer">Построить маршрут</a>
     </section>
@@ -1385,7 +1503,7 @@
     </section>
 
     <section class="fullwidth-image scroll-reveal">
-      <img src="images/test.jpg" alt="" loading="lazy">
+      <img src="images/hands.png" alt="" loading="lazy">
     </section>
 
     <section class="dresscode-block scroll-reveal">
@@ -1406,7 +1524,11 @@
 
     <section class="details-block scroll-reveal">
       <h2 class="details-title">Детали</h2>
-      <p class="details-text">Пожалуйста, не дарите нам цветы – нам будет грустно оставить их после праздника. Если вы хотите порадовать невесту, оформите для неё цветочную подписку – пусть свежие букеты напоминают о тёплом дне ещё долго после свадьбы.</p>
+      <h3 class="details-subtitle">Подарки</h3>
+      <p class="details-text">Самый главный подарок для нас - это, конечно же, Ваше присутствие и хорошее настроение. Но если Вы захотите порадовать нас ещё чем-то, мы будем благодарны за вклад в нашу общую мечту, поэтому подарок в конверте станет для нас самым удобным вариантом.</p>
+      <p class="details-text">Просим не дарить нам цветы, так как они быстро завянут, и мы не успеем ими насладиться.</p>
+      <h3 class="details-subtitle">О детях</h3>
+      <p class="details-text">Мы очень любим детей, однако наш праздник рассчитан исключительно на взрослых. Просим приходить без детей, чтобы все гости могли полностью насладиться вечером.</p>
     </section>
 
     <section class="form-block scroll-reveal">
@@ -1445,26 +1567,64 @@
               <span>Шампанское</span>
             </li>
             <li class="form-option">
+              <input type="checkbox" id="alc-champagne-na" name="alcohol" value="champagne_na">
+              <span>Безалкогольное шампанское</span>
+            </li>
+            <li class="form-option">
               <input type="checkbox" id="alc-wine" name="alcohol" value="wine">
               <span>Белое вино</span>
+            </li>
+            <li class="form-option">
+              <input type="checkbox" id="alc-red-wine" name="alcohol" value="red_wine">
+              <span>Красное вино</span>
             </li>
             <li class="form-option">
               <input type="checkbox" id="alc-cognac" name="alcohol" value="cognac">
               <span>Коньяк</span>
             </li>
             <li class="form-option">
-              <input type="checkbox" id="alc-vodka" name="alcohol" value="vodka">
-              <span>Водка</span>
+              <input type="checkbox" id="alc-whiskey" name="alcohol" value="whiskey">
+              <span>Виски</span>
             </li>
             <li class="form-option">
               <input type="checkbox" id="alc-juice" name="alcohol" value="juice">
-              <span>Сок</span>
-            </li>
-            <li class="form-option">
-              <input type="checkbox" id="alc-none" name="alcohol" value="none">
-              <span>Не пью алкоголь</span>
+              <span>Сок/морс</span>
             </li>
           </ul>
+        </div>
+        <div class="form-group">
+          <span class="form-label">Есть ли у вас аллергии или ограничения в еде?</span>
+          <ul class="form-options">
+            <li class="form-option">
+              <input type="radio" id="allergies-no" name="allergies" value="no" required>
+              <span>Нет</span>
+            </li>
+            <li class="form-option">
+              <input type="radio" id="allergies-yes" name="allergies" value="yes">
+              <span>Да (пожалуйста, укажите)</span>
+            </li>
+          </ul>
+          <div id="allergies-detail-wrap" class="form-allergies-detail" hidden>
+            <label class="form-label" for="allergies-detail">Укажите аллергии или ограничения</label>
+            <input type="text" id="allergies-detail" name="allergies_detail" class="form-input" placeholder="Например, непереносимость лактозы, орехи…" autocomplete="off">
+          </div>
+        </div>
+        <div class="form-group">
+          <span class="form-label">Есть ли песня, под которую вы точно выйдете танцевать?</span>
+          <ul class="form-options">
+            <li class="form-option">
+              <input type="radio" id="dance-trust" name="dance_song" value="trust" required>
+              <span>Доверяю вашему вкусу</span>
+            </li>
+            <li class="form-option">
+              <input type="radio" id="dance-own" name="dance_song" value="own">
+              <span>Напишу свою</span>
+            </li>
+          </ul>
+          <div id="dance-song-detail-wrap" class="form-allergies-detail" hidden>
+            <label class="form-label" for="dance-song-detail">Песня или исполнитель</label>
+            <input type="text" id="dance-song-detail" name="dance_song_detail" class="form-input" placeholder="Например, название трека или артист" autocomplete="off">
+          </div>
         </div>
         <button type="submit" class="form-submit">Отправить</button>
       </form>
@@ -1472,20 +1632,18 @@
 
     <section class="contacts-block scroll-reveal">
       <div class="contacts-section">
-        <h2 class="contacts-section-title">Общий чат</h2>
-        <p class="contacts-section-text">Вступайте в наш чат в Телеграм. Там мы будем делиться впечатлениями, эмоциями, фото и видео.</p>
-        <a href="https://t.me/artyomnaz" class="contacts-btn contacts-btn--filled" target="_blank" rel="noopener noreferrer">Вступить в чат</a>
-      </div>
-      <div class="contacts-section">
         <h2 class="contacts-section-title">Контакты</h2>
         <p class="contacts-section-text">По любым вопросам торжества обращайтесь к нашему координатору – Ксения</p>
-        <a href="https://t.me/artyomnaz" class="contacts-btn contacts-btn--filled" target="_blank" rel="noopener noreferrer">Написать в Телеграм</a>
-        <a href="tel:+79822768691" class="contacts-btn contacts-btn--outline">Позвонить</a>
+        <a href="https://t.me/ksenia_kenig" class="contacts-btn contacts-btn--filled" target="_blank" rel="noopener noreferrer">Написать в Телеграм</a>
+        <a href="tel:+79667537373" class="contacts-btn contacts-btn--outline">Позвонить</a>
       </div>
     </section>
 
     <section class="farewell-block scroll-reveal">
       <p class="farewell-text">До скорой встречи!</p>
+      <svg class="farewell-heart" viewBox="0 0 24 24" aria-hidden="true" width="48" height="48">
+        <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
     </section>
   </div>
   </div>
@@ -1594,6 +1752,44 @@
       var form = document.getElementById('guest-form');
       if (!form) return;
 
+      var allergiesDetailWrap = document.getElementById('allergies-detail-wrap');
+      var allergiesDetailInput = document.getElementById('allergies-detail');
+      function syncAllergiesFields() {
+        var yesChecked = form.querySelector('#allergies-yes:checked');
+        if (yesChecked && allergiesDetailWrap && allergiesDetailInput) {
+          allergiesDetailWrap.hidden = false;
+          allergiesDetailInput.setAttribute('required', 'required');
+        } else {
+          if (allergiesDetailWrap) allergiesDetailWrap.hidden = true;
+          if (allergiesDetailInput) {
+            allergiesDetailInput.removeAttribute('required');
+            allergiesDetailInput.value = '';
+          }
+        }
+      }
+      form.querySelectorAll('[name="allergies"]').forEach(function (radio) {
+        radio.addEventListener('change', syncAllergiesFields);
+      });
+
+      var danceSongDetailWrap = document.getElementById('dance-song-detail-wrap');
+      var danceSongDetailInput = document.getElementById('dance-song-detail');
+      function syncDanceSongFields() {
+        var ownChecked = form.querySelector('#dance-own:checked');
+        if (ownChecked && danceSongDetailWrap && danceSongDetailInput) {
+          danceSongDetailWrap.hidden = false;
+          danceSongDetailInput.setAttribute('required', 'required');
+        } else {
+          if (danceSongDetailWrap) danceSongDetailWrap.hidden = true;
+          if (danceSongDetailInput) {
+            danceSongDetailInput.removeAttribute('required');
+            danceSongDetailInput.value = '';
+          }
+        }
+      }
+      form.querySelectorAll('[name="dance_song"]').forEach(function (radio) {
+        radio.addEventListener('change', syncDanceSongFields);
+      });
+
       form.addEventListener('submit', function (e) {
         e.preventDefault();
 
@@ -1602,16 +1798,29 @@
           var attend = (form.querySelector('[name="attend"]:checked') || {}).value || '';
           var alcoholChecks = form.querySelectorAll('[name="alcohol"]:checked');
           var alcohol = Array.prototype.map.call(alcoholChecks, function (c) { return c.value; }).join(',');
+          var allergies = (form.querySelector('[name="allergies"]:checked') || {}).value || '';
+          var allergiesDetail = ((form.querySelector('[name="allergies_detail"]') || {}).value || '').trim();
+          var danceSong = (form.querySelector('[name="dance_song"]:checked') || {}).value || '';
+          var danceSongDetail = ((form.querySelector('[name="dance_song_detail"]') || {}).value || '').trim();
 
           var submitForm = document.createElement('form');
           submitForm.method = 'POST';
           submitForm.action = GOOGLE_FORM_SCRIPT_URL;
           submitForm.target = 'guest-form-response';
           submitForm.style.display = 'none';
-          ['name', 'attend', 'alcohol'].forEach(function (key) {
+          var payload = {
+            name: name,
+            attend: attend,
+            alcohol: alcohol,
+            allergies: allergies,
+            allergies_detail: allergiesDetail,
+            dance_song: danceSong,
+            dance_song_detail: danceSongDetail
+          };
+          Object.keys(payload).forEach(function (key) {
             var input = document.createElement('input');
             input.name = key;
-            input.value = key === 'name' ? name : key === 'attend' ? attend : alcohol;
+            input.value = payload[key];
             submitForm.appendChild(input);
           });
           document.body.appendChild(submitForm);
@@ -1621,13 +1830,16 @@
 
         alert('Спасибо! Ваша анкета отправлена.');
         form.reset();
+        syncAllergiesFields();
+        syncDanceSongFields();
       });
     })();
 
     (function () {
       // Добавьте имя файла сюда — слайд появится автоматически
       var photos = [
-
+        "dc1.png",
+        "dc2.png"
       ];
 
       var viewport = document.getElementById('dresscode-viewport');
@@ -1639,7 +1851,7 @@
         slide.setAttribute('data-index', i);
         slide.setAttribute('aria-hidden', i === 0 ? 'false' : 'true');
         var img = document.createElement('img');
-        img.src = 'images/dresscode/' + file;
+        img.src = 'images/' + file;
         img.alt = '';
         img.loading = 'lazy';
         slide.appendChild(img);
